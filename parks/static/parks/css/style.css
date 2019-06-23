@@ -179,7 +179,7 @@ padding-left: 5%; padding-right: 5%; padding-top: 75px; padding-bottom: 100px; d
 /* SLIDER AND CAROUSEL*/
 .slider{ width: calc(100vw -10px); height: 100vh; float: left;}
 .carousel {width: calc(100vw -10px); height: 100vh}
-.carousel-inner {calc(100vw -10px); height: 100vh;}
+.carousel-inner {width: calc(100vw -10px); height: 100vh;}
 .carousel-item {width: 100%; height: 100%;}
 .carousel-item:after {content:""; display:block; position:absolute; top:0; bottom:0; left:0; right:0; z-index: 400;
 background: rgba(0, 0, 0, 0.3);}
@@ -243,55 +243,5 @@ select.state {width: 10%; height: 100%; float: left; font-size: 2.3vh; font-fami
 select.type {width: 10%; height: 100%; float: left; font-size: 2.3vh; font-family: 'Poppins'; text-align-last: center; padding: 0 0px}
 option {font-size: 2.6vh; text-align: center; font-family: 'Poppins'}
 option.small {font-size: 2.2vh}
-
-
-
-
-
-/* TABLET RESPONSIVE FIXES */
-@media only screen and (max-width: 989px), only screen and (max-device-width: 989px) {
-	.header{padding: 20px 30px}
-	.header .site-nav{display: none;}
-	.inner-hero{padding: 0 30px; padding-top: 160px; padding-bottom: 80px;}
-	.flip-box-features .flip-box{margin-bottom: 30px;}
-	.titles.center{padding: 0 5%;}
-	.side-image-content .video{margin-top: 40px;}
-	.side-image-content{background: #f2f7fd;}
-	.side-image-content:after{display: none;}
-	.image-features .content-box{padding: 0; margin-bottom:50px; }
-	.side-content img{margin-top: 40px;}
-	.icon-features h2{width: 100%; text-align: left;}
-	.icon-features .icon{padding: 0;}
-	.icon-features .icon:after{display: none;}
-	.testimonials .testimonial{width: 90%; margin: 0 5%;}
-	.clients ul li{width: 33%;}
-	.our-team .team-member{ width: 80%; margin: 0 10%; margin-bottom: 30px;}
-	.works .three-cols .grid-item{width: 50%;}
-	.blog .side-bar{padding-left: 0; margin-top: 50px;}
-	.footer{padding: 50px 30px}
-}
-
-
-
-/* MOBILE RESPONSIVE FIXES */
-@media only screen and (max-width: 767px), only screen and (max-device-width: 767px) {
-	
-	.header{padding: 20px 15px;}
-	.inner-hero{padding: 0 15px; padding-top: 160px; padding-bottom: 80px;}
-	.titles.center{padding: 0;}
-	.titles{padding-right: 0;}
-	.image-features .content-box{padding: 0 15px;}
-	.icon-features .icon{padding: 0 20px; margin-bottom: 30px;}
-	.featured-news .news-box{ width: 80%; margin: 0 10%; margin-bottom: 30px;}
-	.clients ul li{ width: 50%;}
-	.works .three-cols .grid-item{width: 100%;}
-	.blog .post-share ul li{width: 100%;}
-	.search-close{top: 15px; right: 50%; margin-right: -12px;}
-	.search-box .inner{padding: 0;}
-	.search-box .inner form input[type="text"]{ width: 60%; font-size: 16px;}
-	.search-box .inner form button[type="submit"]{ width: auto;}
-	.search-box .inner ul li a{font-size: 11px;}
-	.footer{padding: 30px 30px;}
-}
 
 
