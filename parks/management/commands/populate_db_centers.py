@@ -8,24 +8,28 @@ import logging
 
 
 class Command(BaseCommand):
+    # Update through Cron Job
     help = 'Populates database with visitor center information for each park'
 
     def pull_center_data(self):
         for park in Park.objects.all():
+            # API Settings
             endpoint = 'https://developer.nps.gov/api/v1/visitorcenters'
             api_key = str(settings.API_KEY)
             params = {'api_key': api_key,
                       'parkCode': park.slug,
                       'limit': 50}
-
+            # Pull from API
             response = requests.get(endpoint, params=params).json()
             for entry in response['data']:
+                # Populate Database with returned JSON
                 name = entry['name']
                 desc = entry['description']
                 directions = entry['directionsInfo']
                 direction_url = entry['directionsUrl']
                 url = entry['url']
-
+                
+                # Remove unnecessary characters from latLong return JSON
                 if entry['latLong'] != '':
                     lat_shard, comma, long_shard = entry['latLong'].partition(', ')
                     lat_str = lat_shard.replace('{lat:', '')
@@ -37,7 +41,7 @@ class Command(BaseCommand):
                     point = Point(long, lat)
                 else:
                     point = None
-
+                # If visitor center does not exist, add it to the database
                 if not VisitorCenters.objects.filter(name=name, geometry=point, direction_url=direction_url, url=url).exists():
                     new_center = VisitorCenters(name=name, geometry=point, direction_url=direction_url, url=url, park=park,
                                                 desc=desc, directions=directions)
