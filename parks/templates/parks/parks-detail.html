@@ -63,6 +63,7 @@
 
               <!-- end titles -->
               </div>
+              <!-- Parks Image -->  
               <div class="col-md-5 col-sm-12 wow fadeInRight animated flex-center">
                   <img src="{% static 'parks/images/park-image.jpg' %}" style="height: 400px">
               </div>
@@ -87,8 +88,9 @@
                             {% else %}
                                 {% for center in centers %}
                                 <div class="content-boxes small">
+                                     <!-- Flip Box Content Container -->
                                      <div class="flip-box">
-                                         <!-- Flip Box Front -->
+                                       <!-- Flip Box Front -->
                                        <div class="inner">
                                          <div class="flip-box-front">
                                             <img src="{% static 'parks/images/pattern-center.jpg' %}" class="content-image left">
@@ -110,12 +112,14 @@
                                          <!-- end flip-box-back -->
                                        </div>
                                     </div>
+                                    <!-- end Flip Box Content Container -->
                                 </div>
 
                                 {% endfor %}
                                 <br>
                                 <br>
                                 <div>
+                                <!-- Page Navigation -->    
                                 <h3 class="step-links full-width">
                                 {% if centers.has_previous %}
                                     <a class="link left" href="?centers_page={{ centers.previous_page_number }}">PREVIOUS</a>
@@ -125,10 +129,12 @@
                                     <a class="link right" href="?centers_page={{ centers.next_page_number }}">NEXT</a>
                                 {% endif %}
                                 </h3>
+                                <!-- End Page Navigation -->    
                                 </div>
                                 <div class="current full-width left">
                                         <h3>PAGE {{ centers.number }} of {{ centers.paginator.num_pages }}</h3>
                                 </div>
+                                <!-- Prevent Full page Reload on New Centers Being Displayed -->
                                 <script>
                                     $('#center-container').on("click",".link",function(e){
                                         e.preventDefault(); // cancel click
@@ -143,6 +149,7 @@
 
               <!-- end titles -->
               </div>
+              <!-- Centers Map, Requires Inline Styling -->  
               <div class="map" style="height: 600px; width: 41.667%; float: right; background: none">
                 <style>
                 .leaflet-container {height: 100%}
@@ -157,6 +164,7 @@
           <!--Campgrounds and associated map-->
           <div class="content-container-with-margin2">
             <div class="row">
+                <!-- Campgrounds Map, Requires Inline Styling -->
                 <div class="map" style="height: 600px; width: 41.667%; float: left; background: none; margin-top: 160px; margin-left: 5%">
                     <style>
                         .leaflet-container {height: 100%}
@@ -176,6 +184,7 @@
                             {% else %}
                                 {% for camp in campgrounds %}
                                 <div class="content-boxes large">
+                                     <!-- Flip Box Content Container -->
                                      <div class="flip-box">
                                        <div class="inner">
                                          <!-- Flip Box Front -->
@@ -224,6 +233,7 @@
                                          </div>
                                          <!-- end flip-box-back -->
                                        </div>
+                                    <!-- end Flip Box Content Container -->     
                                     </div>
                                 </div>
 
@@ -231,6 +241,7 @@
                                 <br>
                                 <br>
                                 <div>
+                                <!-- Page Navigation-->    
                                 <h3 class="step-links full-width">
                                 {% if campgrounds.has_previous %}
                                     <a class="link left" href="?camps_page={{ campgrounds.previous_page_number }}">PREVIOUS</a>
@@ -240,10 +251,12 @@
                                     <a class="link right" href="?camps_page={{ campgrounds.next_page_number }}">NEXT</a>
                                 {% endif %}
                                 </h3>
+                                <!-- end Page Navigation -->    
                                 </div>
                                 <div class="current full-width left">
                                         <h3>PAGE {{ campgrounds.number }} of {{ campgrounds.paginator.num_pages }}</h3>
                                 </div>
+                                <!-- Prevent Full Page Reload on New Campgrounds being Displayed -->
                                 <script>
                                     $('#camp-container').on("click",".link",function(e){
                                         e.preventDefault(); // cancel click
