@@ -38,7 +38,7 @@ API_KEY = get_env_variable('API_KEY').replace("'", "")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'nationalparkwebapp.herokuapp.com']
 
