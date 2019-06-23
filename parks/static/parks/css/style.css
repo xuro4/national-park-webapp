@@ -137,6 +137,7 @@ padding-left: 5%; padding-right: 5%; padding-top: 75px; padding-bottom: 100px; d
 .content-container-with-margin {height: 920px; background: url(../images/pattern-wood.png)}
 .content-container-with-margin2 {height: 920px; background: url(../images/pattern-stone.png); background-size: cover; background-position: bottom}
 .content-container-with-margin3 {height: 920px; width: 100%; background: url(../images/pattern-forest.png); background-size: cover}
+.content-container-with-margin4 {height: 940px; background: url(../images/pattern-stone.png); background-size: cover; background-position: bottom}
 
 .front-content {width: 70%; height: 100%; display: flex; align-items: center}
 .content-image {height: 100%; width: 30%}
