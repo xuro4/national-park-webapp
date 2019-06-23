@@ -9,7 +9,7 @@ import datetime
 
 class Command(BaseCommand):
     # Update through Cron Job
-    help = 'Populates database with event information for each park'
+    help = 'Populates database with news release information for each park'
 
     def pull_news_data(self):
         for park in Park.objects.all():
