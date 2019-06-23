@@ -7,7 +7,7 @@ from django.conf import settings
 
 
 class Command(BaseCommand):
-    # Updated through Chron Job
+    # Updated through Cron Job
     help = 'Populates database with event information for each park'
 
     def pull_alert_data(self):
