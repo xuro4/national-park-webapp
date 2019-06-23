@@ -1,1 +1,421 @@
-{% load leaflet_tags %}{% leaflet_css %}{% leaflet_js %}{% load static %}<html lang="en"><head>    <meta charset="utf-8">    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    <title>{{ park.name }} National Parks | News </title>    <link rel="stylesheet" href="{{ STATIC_URL }}parks/css/style.css">    <script src="{% static 'parks/js/jsjquery-3.4.1.min.js' %}"></script>    <script src="{% static 'parks/js/bootstrap.min.js' %}"></script></head><body>    <main>      <header class="header">        <div class="container-fluid">          <div class="row">            <div class="col-12">              <!-- Logo -->              <div class="logo"><a href="{% url 'parks:home' %}"><img src="{{ STATIC_URL }}parks/images/npslogo.png" alt="Image"></a>                  <a href="{% url 'parks:home' %}" class="nav-link"><h2>NATIONAL PARKS</h2></a>              </div>              <!-- Navigation Options -->              <ul class="site-nav">                <li class="nav-item"><a href="{% url 'parks:news-detail' slug=park.slug %}" class="nav-link">OVERVIEW & NEWS</a> </li>                <li class="nav-item"><a href="{% url 'parks:parks-detail' slug=park.slug %}" class="nav-link">LOCATION INFO</a> </li>                <li class="nav-item"><a href="{% url 'parks:education-detail' slug=park.slug %}" class="nav-link">EDUCATIONAL CONTENT</a></li>              </ul>            </div>            <!-- end col-12 -->          </div>          <!-- end row -->        </div>        <!-- end container -->      </header>      <!-- end header -->      <section class="slider">            <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">                  <ol class="carousel-indicators">                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>                    {% for alert in alerts %}                        <li data-target="#myCarousel" data-slide-to="{{ forloop.counter }}"></li>                    {% endfor %}                  </ol>                  <div class="carousel-inner">                      <div class="carousel-item active">                          <img class="full-screen" src="{% static 'parks/images/alert-1.jpg' %}" alt="First slide">                          <div class="carousel-caption first lead">                              <div class="row">                                  <div class="slogan">                                      <div class="transform titles light large no-margin full-width">                                        <h2 class="large white">{{ park.name }}</h2>                                      </div>                                  </div>                              </div>                          </div>                          <div class="carousel-caption third">                              <div class="row">                                  <div class="tag">                                      <div class="transform titles light large no-margin full-width">                                        <h6>{{ park.desc }}</h6>                                      </div>                                  </div>                              </div>                              <div class="row buffered">                                  <div class="slogan">                                    <a href="#section" class="button btn"><h6>LEARN MORE</h6></a>                                  </div>                              </div>                          </div>                      </div>                    {% for alert in alerts %}                        <div class="carousel-item">                        {% if forloop.counter0|add:"1"|divisibleby:"4" %}                            <img class="full-screen" src="{% static 'parks/images/alert-1.jpg' %}" alt="Slide Image">                        {% elif forloop.counter0|add:"1"|divisibleby:"3" %}                            <img class="full-screen" src="{% static 'parks/images/alert-2.jpg' %}" alt="Slide Image">                        {% elif forloop.counter0|add:"1"|divisibleby:"2" %}                            <img class="full-screen" src="{% static 'parks/images/alert-3.jpg' %}" alt="Slide Image">                        {% else %}                            <img class="full-screen" src="{% static 'parks/images/alert-4.jpg' %}" alt="Slide Image">                        {% endif %}                          <div class="carousel-caption first">                              <div class="row">                                  <div class="slogan">                                      <div class="transform titles light large no-margin full-width">                                        <h2>Alert</h2>                                        <h2 class="alt white">{{ alert.title }}</h2>                                      </div>                                  </div>                              </div>                              <div class="row buffered">                                <div class="tag">                                    <div class="transform titles light large no-margin full-width">                                      <h6>{{ alert.desc }}</h6>                                    </div>                                </div>                              </div>                              <div class="row buffered">                                  <div class="slogan">                                    <a href="{{ alert.url }}" class="button btn"><h6>LEARN MORE</h6></a>                                  </div>                              </div>                          </div>                        </div>                    {% endfor %}                  <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>                    <span class="sr-only">Previous</span>                  </a>                  <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">                    <span class="carousel-control-next-icon" aria-hidden="true"></span>                    <span class="sr-only">Next</span>                  </a>            </div>        <!-- end rev_slider -->        </div>      <!-- end rev_slider_wrapper -->      </section>      <section class="site-section side-content" id="section">          <!--Events and Associated Info-->          <div class="content-container-with-margin3">            <div class="row">              <div class="col-md-6 col-sm-12 wow fadeInLeft animated top-fluff">                  <div class="titles light large" id="events-container">                        <h2>Events</h2>                        <div class="pagination blocked" id="events">                            {% if not events %}                                <div class="content-boxes small flex-center top-fluff">                                    <div class="placeholder titles light">                                        <h6>There are no events to display at this moment.</h6>                                    </div>                                </div>                            {% else %}                                {% for event in events %}                                <div class="content-boxes large">                                     <div class="flip-box">                                       <div class="inner">                                         <div class="flip-box-front">                                            <img src="{% static 'parks/images/pattern-event.jpg' %}" class="content-image right">                                             <div class="front-content right">                                                 <div>                                                    <h4 class="large">{{ event.title }}</h4>                                                    <h5 class="large clipped">{{ event.desc }}</h5>                                                 </div>                                             </div>                                         </div>                                         <!-- end flip-box-front -->                                         <!-- Flip Box Back -->                                         <div class="flip-box-back">                                            <div class="inner-content">                                                <p class="medium padded">                                                    <b>Event Date Start: &nbsp </b> {{ event.date_start }} <br>                                                    <b>Event Date End: &nbsp </b> {{ event.date_end }} <br><br>                                                    <b>Times: &nbsp </b>                                                    {% for time in event.times %}                                                        {% if forloop.last %}                                                            {{ time }}                                                        {% else %}                                                            {{ time }}, &nbsp                                                        {% endif %}                                                    {% endfor %}                                                    <br><br>                                                    {% if event.reg_info != "" %}                                                        <b>Additional Registration Info: &nbsp </b> {{ event.reg_info }}                                                    {% else %}                                                        <b>Additional Registration Info: &nbsp </b> None available                                                    {% endif %}                                                </p>                                            </div>                                         </div>                                         <!-- end flip-box-back -->                                       </div>                                    </div>                                </div>                                {% endfor %}                                <br>                                <br>                                <div>                                <h3 class="step-links full-width">                                {% if events.has_previous %}                                    <a class="link left" href="?events_page={{ events.previous_page_number }}">PREVIOUS</a>                                {% endif %}                                {% if events.has_next %}                                    <a class="link right" href="?events_page={{ events.next_page_number }}">NEXT</a>                                {% endif %}                                </h3>                                </div>                                <div class="current full-width left" style="width: 100%; float: left">                                        <h3>PAGE {{ events.number }} of {{ events.paginator.num_pages }}</h3>                                </div>                                <script>                                    $("#events-container").on("click",".link",function(e){                                        e.preventDefault(); // cancel click                                        var page = $(this).attr('href');                                        $("#events").load(page + " #events");                                        console.log(5)                                    });                                </script>                            {% endif %}                        </div>                  </div>              <!-- end titles -->              </div>              <div class="col-md-5 col-sm-12 wow fadeInRight animated">                  <img src="{% static 'parks/images/tour-image.jpg' %}" style="height: 500px; margin-left: 15%; margin-top: 210px">              </div>            <!-- end col-6 -->            </div>          </div>          <!--End Events and associated info-->          <!--News articles and Associated Info-->          <div class="content-container-with-margin">            <div class="row">              <div class="col-md-6 col-sm-12 wow fadeInLeft animated no-fluff">                  <img src="{% static 'parks/images/news-image.jpg' %}" style="height: 480px; width: 600px; margin-left: 10%; margin-top: 215px;">              </div>              <div class="col-md-6 col-sm-6 wow fadeInRight animated" style="margin-top: 100px; margin-left: 0px; margin-right: 0px; padding: 0px 0px;">                  <div class="titles light right" id="news-container">                        <h2>News</h2>                        <div class="pagination blocked" id="news">                            {% if not news %}                                <div class="content-boxes small flex-center top-fluff">                                    <div class="placeholder titles light">                                        <h6>There is no news to display at this moment.</h6>                                    </div>                                </div>                            {% else %}                                {% for paper in news %}                                <div class="content-boxes large">                                     <div class="flip-box">                                       <div class="inner">                                         <!-- Flip Box Front -->                                         <div class="flip-box-front">                                            <img src="{{ paper.img }}" class="content-image right cropped">                                             <div class="front-content left">                                                 <div class="full-width">                                                    <h5 class="large extra clipped"> {{ paper.date }}</h5>                                                    <h4 class="large extra">{{ paper.title }}</h4>                                                 </div>                                             </div>                                         </div>                                         <!-- end flip-box-front -->                                         <!-- Flip Box Back -->                                         <div class="flip-box-back">                                            <div class="inner-content">                                                {% if paper.abstract != "" %}                                                <p class="large"><b class="clipped large">{{ paper.abstract }}</b>                                                <b><a href="{{ paper.url }}" style="color: #003366"><br>-Full Article Found Here</a></b></p>                                                {% else %}                                                <p class="large"><b>No Description Available &nbsp - &nbsp                                                <a href="{{ paper.url }}" style="color: #003366;"><br>Full Article</a></b></p>                                                {% endif %}                                            </div>                                         </div>                                         <!-- end flip-box-back -->                                       </div>                                    </div>                                </div>                                {% endfor %}                                <br>                                <br>                                <div>                                <h3 class="step-links full-width">                                {% if news.has_previous %}                                    <a class="link left" href="?news_page={{ news.previous_page_number }}">PREVIOUS</a>                                {% endif %}                                {% if news.has_next %}                                    <a class="link right" href="?news_page={{ news.next_page_number }}">NEXT</a>                                {% endif %}                                </h3>                                </div>                                <div class="current full-width left">                                        <h3>PAGE {{ news.number }} of {{ news.paginator.num_pages }}</h3>                                </div>                                <script>                                    $('#news-container').on("click",".link",function(e){                                        e.preventDefault(); // cancel click                                        var page = $(this).attr('href');                                        $('#news').load(page + " #news");                                    });                                </script>                            {% endif %}                        </div>                  </div>              </div>            </div>          </div>          <!--End News and associated info-->          <!--Articles and Associated Info-->          <div class="content-container-with-margin2">            <div class="row">              <div class="col-md-6 col-sm-12 wow fadeInLeft animated top-fluff">                  <div class="titles light large" id="article-container">                        <h2>Articles</h2>                        <div class="pagination blocked" id="articles">                            {% if not articles %}                                <div class="content-boxes small flex-center top-fluff">                                    <div class="placeholder titles light">                                        <h6>There are no articles to display at this moment.</h6>                                    </div>                                </div>                            {% else %}                                {% for article in articles %}                                <div class="content-boxes small">                                     <div class="flip-box">                                       <div class="inner">                                         <!-- Flip Box Front -->                                         <div class="flip-box-front">                                            <img src="{{ article.img }}" class="content-image left cropped">                                             <div class="front-content right">                                                 <div class="full-width">                                                    <h4 class="large">{{ article.title }}</h4>                                                 </div>                                             </div>                                         </div>                                         <!-- end flip-box-front -->                                         <!-- Flip Box Back -->                                         <div class="flip-box-back">                                            <div class="inner-content">                                                <p class="medium"><b class="clipped">{{ article.desc }}</b>                                                    <b><a href="{{ paper.url }}" style="color: #003366">-Full Article Found Here</a></b></p>                                            </div>                                         </div>                                         <!-- end flip-box-back -->                                       </div>                                    </div>                                </div>                                {% endfor %}                                <br>                                <br>                                <div>                                <h3 class="step-links full-width">                                {% if articles.has_previous %}                                    <a class="link left" href="?articles_page={{ articles.previous_page_number }}">PREVIOUS</a>                                {% endif %}                                {% if articles.has_next %}                                    <a class="link right" href="?articles_page={{ articles.next_page_number }}">NEXT</a>                                {% endif %}                                </h3>                                </div>                                <div class="current full-width left">                                        <h3>PAGE {{ articles.number }} of {{ articles.paginator.num_pages }}</h3>                                </div>                                <script>                                    $('#article-container').on("click",".link",function(e){                                        e.preventDefault(); // cancel click                                        var page = $(this).attr('href');                                        $('#articles').load(page + " #articles");                                    });                                </script>                            {% endif %}                        </div>                  </div>              <!-- end titles -->              </div>              <div class="col-md-5 col-sm-12 wow fadeInRight animated">                  <img src="{% static 'parks/images/photography-image.jpg' %}" style="height: 500px; margin-left: 15%; margin-top: 220px">              </div>            <!-- end col-6 -->            </div>          </div>          <!--End Articles-->      <!-- end container -->     </section>    </main></body>
+{% load leaflet_tags %}
+{% leaflet_css %}
+{% leaflet_js %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ park.name }} National Parks | News </title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}parks/css/style.css">
+    <script src="{% static 'parks/js/jsjquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'parks/js/bootstrap.min.js' %}"></script>
+</head>
+
+<body>
+    <main>
+      <header class="header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <!-- Logo -->
+              <div class="logo"><a href="{% url 'parks:home' %}"><img src="{{ STATIC_URL }}parks/images/npslogo.png" alt="Image"></a>
+                  <a href="{% url 'parks:home' %}" class="nav-link"><h2>NATIONAL PARKS</h2></a>
+              </div>
+
+              <!-- Navigation Options -->
+              <ul class="site-nav">
+                <li class="nav-item"><a href="{% url 'parks:news-detail' slug=park.slug %}" class="nav-link">OVERVIEW & NEWS</a> </li>
+                <li class="nav-item"><a href="{% url 'parks:parks-detail' slug=park.slug %}" class="nav-link">LOCATION INFO</a> </li>
+                <li class="nav-item"><a href="{% url 'parks:education-detail' slug=park.slug %}" class="nav-link">EDUCATIONAL CONTENT</a></li>
+              </ul>
+            </div>
+            <!-- end col-12 -->
+          </div>
+          <!-- end row -->
+        </div>
+        <!-- end container -->
+      </header>
+      <!-- end header -->
+      <section class="slider">
+            <!-- Carousel -->
+            <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">
+                  <!-- Carousel Indicators -->
+                  <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    {% for alert in alerts %}
+                        <li data-target="#myCarousel" data-slide-to="{{ forloop.counter }}"></li>
+                    {% endfor %}
+                  </ol>
+                  <!-- End Carousel Indicators -->
+                  <!-- Carousel Items -->
+                  <div class="carousel-inner">
+                      <!-- First Slide, Unique -->
+                      <div class="carousel-item active">
+                          <img class="full-screen" src="{% static 'parks/images/alert-1.jpg' %}" alt="First slide">
+                          <!-- Upper Caption, Unique for First Slide -->
+                          <div class="carousel-caption first lead">
+                              <div class="row">
+                                  <div class="slogan">
+                                      <div class="transform titles light large no-margin full-width">
+                                        <h2 class="large white">{{ park.name }}</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- Lower Caption, Unique for First Slide -->
+                          <div class="carousel-caption third">
+                              <div class="row">
+                                  <div class="tag">
+                                      <div class="transform titles light large no-margin full-width">
+                                        <h6>{{ park.desc }}</h6>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row buffered">
+                                  <div class="slogan">
+                                    <a href="#section" class="button btn"><h6>LEARN MORE</h6></a>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    <!-- Standard Slides -->
+                    {% for alert in alerts %}
+                        <!-- Modify Background Image Based on Slide Number -->
+                        <div class="carousel-item">
+                        {% if forloop.counter0|add:"1"|divisibleby:"4" %}
+                            <img class="full-screen" src="{% static 'parks/images/alert-1.jpg' %}" alt="Slide Image">
+                        {% elif forloop.counter0|add:"1"|divisibleby:"3" %}
+                            <img class="full-screen" src="{% static 'parks/images/alert-2.jpg' %}" alt="Slide Image">
+                        {% elif forloop.counter0|add:"1"|divisibleby:"2" %}
+                            <img class="full-screen" src="{% static 'parks/images/alert-3.jpg' %}" alt="Slide Image">
+                        {% else %}
+                            <img class="full-screen" src="{% static 'parks/images/alert-4.jpg' %}" alt="Slide Image">
+                        {% endif %}
+                          <!-- Standard Upper Caption -->
+                          <div class="carousel-caption first">
+                              <div class="row">
+                                  <div class="slogan">
+                                      <div class="transform titles light large no-margin full-width">
+                                        <h2>Alert</h2>
+                                        <h2 class="alt white">{{ alert.title }}</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row buffered">
+                                <div class="tag">
+                                    <div class="transform titles light large no-margin full-width">
+                                      <h6>{{ alert.desc }}</h6>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="row buffered">
+                                  <div class="slogan">
+                                    <a href="{{ alert.url }}" class="button btn"><h6>LEARN MORE</h6></a>
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
+                    {% endfor %}
+                  <!-- Carousel Navigation -->  
+                  <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                  <!-- End Carousel Navigation -->  
+            </div>
+        <!-- end Carousel -->
+        </div>
+      <!-- slider wrapper -->
+      </section>
+
+      <section class="site-section side-content" id="section">
+          <!--Events and Associated Info-->
+          <div class="content-container-with-margin3">
+            <div class="row">
+              <!-- Page Spacing -->
+              <div class="col-md-6 col-sm-12 wow fadeInLeft animated top-fluff">
+                  <div class="titles light large" id="events-container">
+                        <h2>Events</h2>
+                        <div class="pagination blocked" id="events">
+                            {% if not events %}
+                                <div class="content-boxes small flex-center top-fluff">
+                                    <div class="placeholder titles light">
+                                        <h6>There are no events to display at this moment.</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for event in events %}
+                                <div class="content-boxes large">
+                                     <!-- Flip Box Content Boxes -->
+                                     <div class="flip-box">
+                                       <div class="inner">
+                                         <!-- Flip Box Front -->
+                                         <div class="flip-box-front">
+                                            <img src="{% static 'parks/images/pattern-event.jpg' %}" class="content-image right">
+                                             <div class="front-content right">
+                                                 <div>
+                                                    <h4 class="large">{{ event.title }}</h4>
+
+                                                    <h5 class="large clipped">{{ event.desc }}</h5>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <!-- end flip-box-front -->
+                                         <!-- Flip Box Back -->
+                                         <div class="flip-box-back">
+                                            <div class="inner-content">
+                                                <p class="medium padded">
+                                                    <b>Event Date Start: &nbsp </b> {{ event.date_start }} <br>
+                                                    <b>Event Date End: &nbsp </b> {{ event.date_end }} <br><br>
+                                                    <b>Times: &nbsp </b>
+                                                    {% for time in event.times %}
+                                                        {% if forloop.last %}
+                                                            {{ time }}
+                                                        {% else %}
+                                                            {{ time }}, &nbsp
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <br><br>
+                                                    {% if event.reg_info != "" %}
+                                                        <b>Additional Registration Info: &nbsp </b> {{ event.reg_info }}
+                                                    {% else %}
+                                                        <b>Additional Registration Info: &nbsp </b> None available
+                                                    {% endif %}
+                                                </p>
+                                            </div>
+                                         </div>
+                                         <!-- end flip-box-back -->
+                                       </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                                <br>
+                                <br>
+                                <div>
+                                <!-- Page Navigation -->
+                                <h3 class="step-links full-width">
+                                {% if events.has_previous %}
+                                    <a class="link left" href="?events_page={{ events.previous_page_number }}">PREVIOUS</a>
+                                {% endif %}
+
+                                {% if events.has_next %}
+                                    <a class="link right" href="?events_page={{ events.next_page_number }}">NEXT</a>
+                                {% endif %}
+                                </h3>
+                                <!-- end Page Navigation -->  
+                                </div>
+                                <div class="current full-width left" style="width: 100%; float: left">
+                                        <h3>PAGE {{ events.number }} of {{ events.paginator.num_pages }}</h3>
+                                </div>
+                                <!-- Prevent Page from Reloading on New Events Page -->
+                                <script>
+                                    $("#events-container").on("click",".link",function(e){
+                                        e.preventDefault(); // cancel click
+                                        var page = $(this).attr('href');
+                                        $("#events").load(page + " #events");
+                                        console.log(5)
+                                    });
+                                </script>
+                            {% endif %}
+                        </div>
+                  </div>
+
+              <!-- end titles -->
+              </div>
+              <!-- Events Associated Image -->
+              <div class="col-md-5 col-sm-12 wow fadeInRight animated">
+                  <img src="{% static 'parks/images/tour-image.jpg' %}" style="height: 500px; margin-left: 15%; margin-top: 210px">
+              </div>
+            <!-- end col-6 -->
+            </div>
+          </div>
+          <!--End Events and associated info-->
+
+          <!--News articles and Associated Info-->
+          <div class="content-container-with-margin">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 wow fadeInLeft animated no-fluff">
+                  <!-- News Associated Image -->
+                  <img src="{% static 'parks/images/news-image.jpg' %}" style="height: 480px; width: 600px; margin-left: 10%; margin-top: 215px;">
+              </div>
+              <!-- Page Spacing col-6 -->
+              <div class="col-md-6 col-sm-6 wow fadeInRight animated" style="margin-top: 100px; margin-left: 0px; margin-right: 0px; padding: 0px 0px;">
+                  <div class="titles light right" id="news-container">
+                        <h2>News</h2>
+                        <div class="pagination blocked" id="news">
+                            {% if not news %}
+                                <div class="content-boxes small flex-center top-fluff">
+                                    <div class="placeholder titles light">
+                                        <h6>There is no news to display at this moment.</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for paper in news %}
+                                <div class="content-boxes large">
+                                     <!-- Flip Box Content Container -->
+                                     <div class="flip-box">
+                                       <div class="inner">
+                                         <!-- Flip Box Front -->
+                                         <div class="flip-box-front">
+                                            <img src="{{ paper.img }}" class="content-image right cropped">
+                                             <div class="front-content left">
+                                                 <div class="full-width">
+                                                    <h5 class="large extra clipped"> {{ paper.date }}</h5>
+
+                                                    <h4 class="large extra">{{ paper.title }}</h4>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <!-- end flip-box-front -->
+                                         <!-- Flip Box Back -->
+                                         <div class="flip-box-back">
+                                            <div class="inner-content">
+                                                {% if paper.abstract != "" %}
+                                                <p class="large"><b class="clipped large">{{ paper.abstract }}</b>
+                                                <b><a href="{{ paper.url }}" style="color: #003366"><br>-Full Article Found Here</a></b></p>
+                                                {% else %}
+                                                <p class="large"><b>No Description Available &nbsp - &nbsp
+                                                <a href="{{ paper.url }}" style="color: #003366;"><br>Full Article</a></b></p>
+                                                {% endif %}
+                                            </div>
+                                         </div>
+                                         <!-- end flip-box-back -->
+                                       </div>
+                                    <!-- end Flip Box Content Container -->   
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                                <br>
+                                <br>
+                                <div>
+                                <!-- Page Navigation -->  
+                                <h3 class="step-links full-width">
+                                {% if news.has_previous %}
+                                    <a class="link left" href="?news_page={{ news.previous_page_number }}">PREVIOUS</a>
+                                {% endif %}
+
+                                {% if news.has_next %}
+                                    <a class="link right" href="?news_page={{ news.next_page_number }}">NEXT</a>
+                                {% endif %}
+                                </h3>
+                                <!-- end Page Navigation -->
+                                </div>
+                                <div class="current full-width left">
+                                        <h3>PAGE {{ news.number }} of {{ news.paginator.num_pages }}</h3>
+                                </div>
+                                <!-- Prevent Page Reload on New News Page -->
+                                <script>
+                                    $('#news-container').on("click",".link",function(e){
+                                        e.preventDefault(); // cancel click
+                                        var page = $(this).attr('href');
+                                        $('#news').load(page + " #news");
+                                    });
+                                </script>
+                            {% endif %}
+                        </div>
+
+                  </div>
+              </div>
+            <!-- end Page Spacing col-6-->  
+            </div>
+          </div>
+          <!--End News and associated info-->
+
+          <!--Articles and Associated Info-->
+          <div class="content-container-with-margin2">
+            <div class="row">
+              <!-- Page Spacing col-6 -->
+              <div class="col-md-6 col-sm-12 wow fadeInLeft animated top-fluff">
+                  <div class="titles light large" id="article-container">
+                        <h2>Articles</h2>
+                        <div class="pagination blocked" id="articles">
+                            {% if not articles %}
+                                <div class="content-boxes small flex-center top-fluff">
+                                    <div class="placeholder titles light">
+                                        <h6>There are no articles to display at this moment.</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for article in articles %}
+                                <div class="content-boxes small">
+                                     <!-- Flip Box Content Container -->
+                                     <div class="flip-box">
+                                       <div class="inner">
+                                         <!-- Flip Box Front -->
+                                         <div class="flip-box-front">
+                                            <img src="{{ article.img }}" class="content-image left cropped">
+                                             <div class="front-content right">
+                                                 <div class="full-width">
+                                                    <h4 class="large">{{ article.title }}</h4>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <!-- end flip-box-front -->
+                                         <!-- Flip Box Back -->
+                                         <div class="flip-box-back">
+                                            <div class="inner-content">
+                                                <p class="medium"><b class="clipped">{{ article.desc }}</b>
+                                                    <b><a href="{{ paper.url }}" style="color: #003366">-Full Article Found Here</a></b></p>
+                                            </div>
+                                         </div>
+                                         <!-- end flip-box-back -->
+                                       </div>
+                                    <!-- end Flip Box Content Container -->   
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                                <br>
+                                <br>
+                                <div>
+                                <!-- Page Navigation-->
+                                <h3 class="step-links full-width">
+                                {% if articles.has_previous %}
+                                    <a class="link left" href="?articles_page={{ articles.previous_page_number }}">PREVIOUS</a>
+                                {% endif %}
+
+                                {% if articles.has_next %}
+                                    <a class="link right" href="?articles_page={{ articles.next_page_number }}">NEXT</a>
+                                {% endif %}
+                                </h3>
+                                <!-- end Page Navigation -->  
+                                </div>
+                                <div class="current full-width left">
+                                        <h3>PAGE {{ articles.number }} of {{ articles.paginator.num_pages }}</h3>
+                                </div>
+                                <!-- Prevent Entire Page Reload on New Article Page -->
+                                <script>
+                                    $('#article-container').on("click",".link",function(e){
+                                        e.preventDefault(); // cancel click
+                                        var page = $(this).attr('href');
+                                        $('#articles').load(page + " #articles");
+                                    });
+                                </script>
+                            {% endif %}
+                        </div>
+
+                  </div>
+
+              <!-- end titles -->
+              </div>
+              <!-- Articles Associate Image-->
+              <div class="col-md-5 col-sm-12 wow fadeInRight animated">
+                  <img src="{% static 'parks/images/photography-image.jpg' %}" style="height: 500px; margin-left: 15%; margin-top: 220px">
+              </div>
+            <!-- end col-6 -->
+            </div>
+          </div>
+          <!--End Articles-->
+
+      <!-- end container -->
+     </section>
+    </main>
+</body>
