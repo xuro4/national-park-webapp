@@ -40,10 +40,13 @@
       <!-- end header -->
       <section class="slider">
         <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">
+                <!-- Search Bar -->    
                 <div class="search-box">
                         <div class="inner">
                             <form action="{% url 'parks:search-results' %}" method="get" accept-charset="utf-8">
+                                <!-- Text Query -->
                                 <input type="text" placeholder="Find a National Park" name="q">
+                                <!-- State Selection -->
                                 <select name="state" class="state" id="slow-scroll" onmousedown="if(this.options.length>8){this.size=2;}"  onchange='this.size=0;' onblur="this.size=0;">
                                     <option selected="selected" hidden value="">STATE</option>
                                     <option value="">ALL</option>
@@ -96,6 +99,7 @@
                                     <option value="WV">WV</option>
                                     <option value="WI">WI</option>
                                     <option value="WY">WY</option></select>
+                                <!-- Designation Selection -->
                                 <select name="type" class="type" id="#slow-scroll2" onmousedown="if(this.options.length>2){this.size=2;}"  onchange='this.size=0;' onblur="this.size=0;">
                                     <option selected="selected" hidden value="">TYPE</option>
                                     <option class="small" value="">ANY</option>
@@ -104,8 +108,11 @@
                                     <option class="small" value="TRAIL">TRAIL</option>
                                     <option class="small" value="RIVER">RIVER</option>
                                     <option class="small" value="OTHER">OTHER</option></select>
+                                <!-- Default Page Value -->
                                 <input type="hidden" name="page" value="1">
+                                <!-- Submit Button -->
                                 <button type="submit">SEARCH</button>
+                                <!-- Modify Scroll Increment to Prevent Select From Skipping Options -->
                                 <script>
                                     var lastScroll = 0;
                                     $('#slow-scroll').scroll(function(e){
@@ -116,6 +123,7 @@
                                         el.scrollTop(lastScroll);
                                     });
                                 </script>
+                                <!-- Modify Scroll Increment to Prevent Select From Skipping Options -->
                                 <script>
                                     var lastScroll = 0;
                                     $('#slow-scroll2').scroll(function(e){
@@ -129,14 +137,19 @@
                             </form>
                         </div>
                 </div>
+                <!-- End Search Bar -->
+                <!-- Carousel Indicators -->
                 <ol class="carousel-indicators">
                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
                     <li data-target="#myCarousel" data-slide-to="1"></li>
                     <li data-target="#myCarousel" data-slide-to="2"></li>
                 </ol>
+                <!-- End Carousel Indicators -->
+                <!-- Carousel Items -->
                 <div class="carousel-inner">
                       <div class="carousel-item active">
                           <img class="full-screen" src="{% static 'parks/images/home-1.jpg' %}" alt="First slide">
+                          <!-- Upper Caption -->
                           <div class="carousel-caption first">
                               <div class="row">
                                   <div class="slogan">
@@ -146,6 +159,7 @@
                                   </div>
                               </div>
                           </div>
+                          <!-- Lower Caption -->
                           <div class="carousel-caption fourth">
                               <div class="row">
                                   <div class="tag">
@@ -199,6 +213,8 @@
                           </div>
                       </div>
                 </div>
+                <!-- End Carousel Items -->
+                <!-- Carousel Navigation -->
                 <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
@@ -207,7 +223,9 @@
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>
+                <!-- End Carousel Navigation -->
             </div>
+        <!-- end Carousel -->
         </div>
       </section>
     </main>
