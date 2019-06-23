@@ -8,7 +8,7 @@ import logging
 
 class Command(BaseCommand):
     # Update through Cron Job
-    help = 'Populates database with event information for each park'
+    help = 'Populates database with lessons information for each park'
 
     def pull_lessons_data(self):
         for park in Park.objects.all():
