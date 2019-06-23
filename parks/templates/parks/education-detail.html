@@ -39,6 +39,7 @@
       <!-- end header -->
 
       <section class="site-section side-content">
+          <!-- Leaflet Map, settings must be init through html -->
           <div class="map-container">
             <div class="map" style="height: 100%; width: 100%; margin-top: 0px; margin-bottom: 0px; float: center; background: none">
               <style>
@@ -51,6 +52,7 @@
           <!-- Lesson Plans and Associated Info -->
           <div class="content-container-with-margin3">
             <div class="row">
+              <!-- Page Spacing Col-6 -->
               <div class="col-md-6 col-sm-12 wow fadeInLeft animated top-fluff">
                   <div class="titles light large" id="lessons-container">
                         <h2>Lesson Plans</h2>
@@ -64,6 +66,7 @@
                             {% else %}
                                 {% for lesson in lessons %}
                                 <div class="content-boxes large">
+                                     <!-- Flip Box Content Container -->
                                      <div class="flip-box">
                                          <!-- Flip Box Front -->
                                          <div class="inner">
@@ -82,6 +85,7 @@
                                              <div class="flip-box-back">
                                                  <div class="inner-content">
                                                     <p class="large">
+                                                        <!-- Cut Text Short if Too Large for Container -->
                                                         <b class="clipped large">{{ lesson.desc }}</b>
                                                         <b><a href="{{ lessons.url }}" style="color: #003366"><br>-Full Lesson Found Here</a></b>
                                                     </p>
@@ -89,6 +93,7 @@
                                              </div>
                                          <!-- end flip-box-back -->
                                         </div>
+                                        <!-- end Flip Box Content Container --> 
                                     </div>
                                 </div>
 
@@ -96,6 +101,7 @@
                                 <br>
                                 <br>
                                 <div>
+                                <!-- Page Navigation Info -->    
                                 <h3 class="step-links full-width" style="width: 100%">
                                 {% if lessons.has_previous %}
                                     <a class="link left" href="?lessons_page={{ lessons.previous_page_number }}">PREVIOUS</a>
@@ -105,10 +111,12 @@
                                     <a class="link right" href="?lessons_page={{ lessons.next_page_number }}">NEXT</a>
                                 {% endif %}
                                 </h3>
+                                <!-- End Page Navigation Info -->
                                 </div>
                                 <div class="current full-width left">
                                         <h3>PAGE {{ lessons.number }} of {{ lessons.paginator.num_pages }}</h3>
                                 </div>
+                                <!-- Prevent Entire Page From Reloading on Page Change -->
                                 <script>
                                     $("#lessons-container").on("click",".link",function(e){
                                         e.preventDefault(); // cancel click
@@ -123,12 +131,12 @@
 
               <!-- end titles -->
               </div>
+              <!-- Lesson Plans Associated Image -->
               <div class="col-md-5 col-sm-12 wow fadeInRight animated">
                   <img src="{% static 'parks/images/school-image.jpg' %}" style="height: 500px;  margin-left: 5%; margin-top: 210px">
               </div>
 
                 <!-- end col-6 -->
-          <!-- end col-6 -->
             </div>
           <!-- end row -->
           </div>
@@ -136,9 +144,11 @@
           <!-- People and Associated Info-->
           <div class="content-container-with-margin">
             <div class="row">
+              <!-- People Section Associated Image -->
               <div class="col-md-6 col-sm-12 wow fadeInLeft animated no-fluff">
                   <img src="{% static 'parks/images/people-image.jpg' %}" style="height: 500px; width: 600px; margin-left: 10%; margin-top: 210px;">
               </div>
+              <!-- Page Spacing -->  
               <div class="col-md-6 col-sm-6 wow fadeInRight animated top-fluff">
                   <div class="titles light right" id="people-container">
                         <h2>PEOPLE</h2>
@@ -152,6 +162,7 @@
                             {% else %}
                                 {% for person in people %}
                                 <div class="content-boxes large">
+                                     <!--Flip Box Content Container -->
                                      <div class="flip-box">
                                        <div class="inner">
                                          <!-- Flip Box Front -->
@@ -178,6 +189,7 @@
                                          </div>
                                          <!-- end flip-box-back -->
                                        </div>
+                                       <!-- end Flip Box Content Container -->  
                                     </div>
                                 </div>
 
@@ -185,6 +197,7 @@
                                 <br>
                                 <br>
                                 <div>
+                                <!-- Page Navigation Info -->
                                 <h3 class="step-links full-width">
                                 {% if people.has_previous %}
                                     <a class="link left" href="?people_page={{ people.previous_page_number }}">PREVIOUS</a>
@@ -194,10 +207,12 @@
                                     <a class="link right" href="?people_page={{ people.next_page_number }}">NEXT</a>
                                 {% endif %}
                                 </h3>
+                                <!-- end Page Navigation Info -->    
                                 </div>
                                 <div class="current full-width left">
                                         <h3>PAGE {{ people.number }} of {{ people.paginator.num_pages }}</h3>
                                 </div>
+                                <!-- Prevent Entire Page from Reloading on New Page -->
                                 <script>
                                     $('#people-container').on("click",".link",function(e){
                                         e.preventDefault(); // cancel click
@@ -209,7 +224,9 @@
                         </div>
 
                   </div>
+              <!-- end col-6 -->    
               </div>
+            <!-- end Row -->    
             </div>
           </div>
           <!--End People-->
@@ -217,6 +234,7 @@
           <!--Places and Associated Info-->
           <div class="content-container-with-margin2">
             <div class="row" style="width: 100%">
+              <!-- Page Spacing -->  
               <div class="col-md-6 col-sm-12 wow fadeInLeft animated top-fluff">
                   <div class="titles light large" id="places-container">
                         <h2>Places</h2>
@@ -230,6 +248,7 @@
                             {% else %}
                                 {% for place in places %}
                                 <div class="content-boxes small">
+                                    <!-- Flip Box Content Container -->
                                      <div class="flip-box">
                                        <div class="inner">
                                          <!-- Flip Box Front -->
@@ -245,6 +264,7 @@
                                          <!-- Flip Box Back -->
                                          <div class="flip-box-back">
                                             <div class="inner-content">
+                                                <!-- Cut Text Short if Too Large for Container -->
                                                 <p class="medium"><b class="clipped">{{ place.desc }}</b>
                                                     <b><a href="{{ place.url }}" style="color: #003366"> -More Info Found Here</a></b></p>
                                             </div>
@@ -252,12 +272,14 @@
                                          <!-- end flip-box-back -->
                                        </div>
                                     </div>
+                                    <!-- End Flip Box -->
                                 </div>
 
                                 {% endfor %}
                                 <br>
                                 <br>
                                 <div>
+                                <!-- Page Navigation -->    
                                 <h3 class="step-links full-width">
                                 {% if places.has_previous %}
                                     <a class="link left" href="?places_page={{ places.previous_page_number }}">PREVIOUS</a>
@@ -267,10 +289,12 @@
                                     <a class="link right" href="?places_page={{ places.next_page_number }}">NEXT</a>
                                 {% endif %}
                                 </h3>
+                                <!-- End Page Navigation -->    
                                 </div>
                                 <div class="current full-width left">
                                         <h3>PAGE {{ places.number }} of {{ places.paginator.num_pages }}</h3>
                                 </div>
+                                <!-- Prevent Entire Page from Reloading on New Places Page -->
                                 <script>
                                     $('#places-container').on("click",".link",function(e){
                                         e.preventDefault(); // cancel click
@@ -285,6 +309,7 @@
 
               <!-- end titles -->
               </div>
+              <!-- Places Associated Image -->  
               <div class="col-md-5 col-sm-12 wow fadeInRight animated">
                   <img src="{% static 'parks/images/places-image.jpg' %}" style="height: 500px; margin-left: 15%; margin-top: 225px">
               </div>
@@ -296,7 +321,7 @@
       </section>
     </main>
 </body>
-
+<!-- Leaflet Map Initialization Function -->
 <script type="text/javascript">
 
     function map_init(map, options) {
