@@ -1,0 +1,315 @@
+{% load leaflet_tags %}
+{% leaflet_css %}
+{% leaflet_js %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ park.name }} National Parks | Education </title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}parks/css/style.css">
+    <script src="{% static 'parks/js/jsjquery-3.4.1.min.js' %}"></script>
+</head>
+
+<body>
+    <main>
+      <header class="header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <!-- Logo -->
+              <div class="logo"><a href="{% url 'parks:home' %}"><img src="{{ STATIC_URL }}parks/images/npslogo.png" alt="Image"></a>
+                  <a href="{% url 'parks:home' %}" class="nav-link"><h2>NATIONAL PARKS</h2></a>
+              </div>
+
+              <!-- Navigation Options -->
+              <ul class="site-nav">
+                <li class="nav-item"><a href="{% url 'parks:news-detail' slug=park.slug %}" class="nav-link">OVERVIEW & NEWS</a> </li>
+                <li class="nav-item"><a href="{% url 'parks:parks-detail' slug=park.slug %}" class="nav-link">LOCATION INFO</a> </li>
+                <li class="nav-item"><a href="{% url 'parks:education-detail' slug=park.slug %}" class="nav-link">EDUCATIONAL CONTENT</a></li>
+              </ul>
+            </div>
+            <!-- end col-12 -->
+          </div>
+          <!-- end row -->
+        </div>
+        <!-- end container -->
+      </header>
+      <!-- end header -->
+
+      <section class="site-section side-content">
+          <div class="map-container">
+            <div class="map" style="height: 100%; width: 100%; margin-top: 0px; margin-bottom: 0px; float: center; background: none">
+              <style>
+                .leaflet-container {height: 100%}
+              </style>
+                {% leaflet_map "main" callback="map_init" %}
+            </div>
+          </div>
+
+          <!-- Lesson Plans and Associated Info -->
+          <div class="content-container-with-margin3">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 wow fadeInLeft animated top-fluff">
+                  <div class="titles light large" id="lessons-container">
+                        <h2>Lesson Plans</h2>
+                        <div class="pagination" id="lessons" style="display: block">
+                            {% if not lessons %}
+                                <div class="content-boxes large flex-center top-fluff">
+                                    <div class="placeholder titles light">
+                                        <h6>There are no lesson plans to display at this moment.</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for lesson in lessons %}
+                                <div class="content-boxes large">
+                                     <div class="flip-box">
+                                         <!-- Flip Box Front -->
+                                         <div class="inner">
+                                             <div class="flip-box-front">
+                                                <img src="{% static 'parks/images/pattern-school.jpg' %}" class="content-image right">
+                                                 <div class="front-content right">
+                                                     <div>
+                                                        <h4 class="large">{{ lesson.title }}</h4>
+
+                                                        <h5 class="large extra"><br>{{ lesson.grade_level }} <br> {{ lesson.subject }}</h5>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                             <!-- end flip-box-front -->
+                                             <!-- Flip Box Back -->
+                                             <div class="flip-box-back">
+                                                 <div class="inner-content">
+                                                    <p class="large">
+                                                        <b class="clipped large">{{ lesson.desc }}</b>
+                                                        <b><a href="{{ lessons.url }}" style="color: #003366"><br>-Full Lesson Found Here</a></b>
+                                                    </p>
+                                                 </div>
+                                             </div>
+                                         <!-- end flip-box-back -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                                <br>
+                                <br>
+                                <div>
+                                <h3 class="step-links full-width" style="width: 100%">
+                                {% if lessons.has_previous %}
+                                    <a class="link left" href="?lessons_page={{ lessons.previous_page_number }}">PREVIOUS</a>
+                                {% endif %}
+
+                                {% if lessons.has_next %}
+                                    <a class="link right" href="?lessons_page={{ lessons.next_page_number }}">NEXT</a>
+                                {% endif %}
+                                </h3>
+                                </div>
+                                <div class="current full-width left">
+                                        <h3>PAGE {{ lessons.number }} of {{ lessons.paginator.num_pages }}</h3>
+                                </div>
+                                <script>
+                                    $("#lessons-container").on("click",".link",function(e){
+                                        e.preventDefault(); // cancel click
+                                        var page = $(this).attr('href');
+                                        $("#lessons").load(page + " #lessons");
+                                    });
+                                </script>
+                            {% endif %}
+                        </div>
+
+                  </div>
+
+              <!-- end titles -->
+              </div>
+              <div class="col-md-5 col-sm-12 wow fadeInRight animated">
+                  <img src="{% static 'parks/images/school-image.jpg' %}" style="height: 500px;  margin-left: 5%; margin-top: 210px">
+              </div>
+
+                <!-- end col-6 -->
+          <!-- end col-6 -->
+            </div>
+          <!-- end row -->
+          </div>
+
+          <!-- People and Associated Info-->
+          <div class="content-container-with-margin">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 wow fadeInLeft animated no-fluff">
+                  <img src="{% static 'parks/images/people-image.jpg' %}" style="height: 500px; width: 600px; margin-left: 10%; margin-top: 210px;">
+              </div>
+              <div class="col-md-6 col-sm-6 wow fadeInRight animated top-fluff">
+                  <div class="titles light right" id="people-container">
+                        <h2>PEOPLE</h2>
+                        <div class="pagination blocked" id="people">
+                            {% if not people %}
+                                <div class="content-boxes large flex-center top-fluff">
+                                    <div class="placeholder titles light">
+                                        <h6>There are no notable figures to display at this moment.</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for person in people %}
+                                <div class="content-boxes large">
+                                     <div class="flip-box">
+                                       <div class="inner">
+                                         <!-- Flip Box Front -->
+                                         <div class="flip-box-front">
+                                            <img src="{{ person.img }}" class="content-image right cropped">
+                                             <div class="front-content left">
+                                                 <div class="full-width">
+                                                    <h4 class="large center-text">{{ person.title }}</h4>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <!-- end flip-box-front -->
+                                         <!-- Flip Box Back -->
+                                         <div class="flip-box-back">
+                                            <div class="inner-content">
+                                                {% if people.desc != "" %}
+                                                <p class="large"><b class="clipped large">{{ person.desc }}</b>
+                                                <b><a href="{{ person.url }}" style="color: #003366"><br> -More Info Found Here</a></b></p>
+                                                {% else %}
+                                                <p class="large"><b>No Description Available &nbsp - &nbsp
+                                                <a href="{{ person.url }}" style="color: #003366;"> <br> More Information</a></b></p>
+                                                {% endif %}
+                                            </div>
+                                         </div>
+                                         <!-- end flip-box-back -->
+                                       </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                                <br>
+                                <br>
+                                <div>
+                                <h3 class="step-links full-width">
+                                {% if people.has_previous %}
+                                    <a class="link left" href="?people_page={{ people.previous_page_number }}">PREVIOUS</a>
+                                {% endif %}
+
+                                {% if people.has_next %}
+                                    <a class="link right" href="?people_page={{ people.next_page_number }}">NEXT</a>
+                                {% endif %}
+                                </h3>
+                                </div>
+                                <div class="current full-width left">
+                                        <h3>PAGE {{ people.number }} of {{ people.paginator.num_pages }}</h3>
+                                </div>
+                                <script>
+                                    $('#people-container').on("click",".link",function(e){
+                                        e.preventDefault(); // cancel click
+                                        var page = $(this).attr('href');
+                                        $('#people').load(page + " #people");
+                                    });
+                                </script>
+                            {% endif %}
+                        </div>
+
+                  </div>
+              </div>
+            </div>
+          </div>
+          <!--End People-->
+
+          <!--Places and Associated Info-->
+          <div class="content-container-with-margin2">
+            <div class="row" style="width: 100%">
+              <div class="col-md-6 col-sm-12 wow fadeInLeft animated top-fluff">
+                  <div class="titles light large" id="places-container">
+                        <h2>Places</h2>
+                        <div class="pagination blocked" id="places">
+                            {% if not places %}
+                                <div class="content-boxes large flex-center top-fluff">
+                                    <div class="placeholder titles light">
+                                        <h6>There are no places to display at this moment.</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for place in places %}
+                                <div class="content-boxes small">
+                                     <div class="flip-box">
+                                       <div class="inner">
+                                         <!-- Flip Box Front -->
+                                         <div class="flip-box-front">
+                                            <img src="{{ place.img }}" class="content-image left cropped">
+                                             <div class="front-content right">
+                                                 <div class="full-width">
+                                                    <h4 class="large center-text">{{ place.title }}</h4>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <!-- end flip-box-front -->
+                                         <!-- Flip Box Back -->
+                                         <div class="flip-box-back">
+                                            <div class="inner-content">
+                                                <p class="medium"><b class="clipped">{{ place.desc }}</b>
+                                                    <b><a href="{{ place.url }}" style="color: #003366"> -More Info Found Here</a></b></p>
+                                            </div>
+                                         </div>
+                                         <!-- end flip-box-back -->
+                                       </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                                <br>
+                                <br>
+                                <div>
+                                <h3 class="step-links full-width">
+                                {% if places.has_previous %}
+                                    <a class="link left" href="?places_page={{ places.previous_page_number }}">PREVIOUS</a>
+                                {% endif %}
+
+                                {% if places.has_next %}
+                                    <a class="link right" href="?places_page={{ places.next_page_number }}">NEXT</a>
+                                {% endif %}
+                                </h3>
+                                </div>
+                                <div class="current full-width left">
+                                        <h3>PAGE {{ places.number }} of {{ places.paginator.num_pages }}</h3>
+                                </div>
+                                <script>
+                                    $('#places-container').on("click",".link",function(e){
+                                        e.preventDefault(); // cancel click
+                                        var page = $(this).attr('href');
+                                        $('#places').load(page + " #places");
+                                    });
+                                </script>
+                            {% endif %}
+                        </div>
+
+                  </div>
+
+              <!-- end titles -->
+              </div>
+              <div class="col-md-5 col-sm-12 wow fadeInRight animated">
+                  <img src="{% static 'parks/images/places-image.jpg' %}" style="height: 500px; margin-left: 15%; margin-top: 225px">
+              </div>
+            <!-- end col-6 -->
+            </div>
+          </div>
+          <!--End Places-->
+      <!-- end container -->
+      </section>
+    </main>
+</body>
+
+<script type="text/javascript">
+
+    function map_init(map, options) {
+        // get point lat and lon
+        var lon = "{{ park.geometry.x }}";
+        var lat = "{{ park.geometry.y }}";
+
+        // zoom to point & add it to map
+        map.setView([lat, lon], 6);
+        L.marker([lat, lon]).addTo(map);
+
+        map.options.minZoom = 2;
+        var title = L.control({position: 'topleft'});
+        title.addTo(map);
+    }
+</script>

@@ -1,0 +1,309 @@
+{% load leaflet_tags %}
+{% leaflet_css %}
+{% leaflet_js %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ park.name }} National Parks | Location </title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}parks/css/style.css">
+    <script src="{% static 'parks/js/jsjquery-3.4.1.min.js' %}"></script>
+</head>
+
+<body>
+    <main>
+      <header class="header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <!-- Logo -->
+              <div class="logo"><a href="{% url 'parks:home' %}"><img src="{{ STATIC_URL }}parks/images/npslogo.png" alt="Image"></a>
+                  <a href="{% url 'parks:home' %}" class="nav-link"><h2>NATIONAL PARKS</h2></a>
+              </div>
+
+              <!-- Navigation Options -->
+              <ul class="site-nav">
+                <li class="nav-item"><a href="{% url 'parks:news-detail' slug=park.slug %}" class="nav-link">OVERVIEW & NEWS</a> </li>
+                <li class="nav-item"><a href="{% url 'parks:parks-detail' slug=park.slug %}" class="nav-link">LOCATION INFO</a> </li>
+                <li class="nav-item"><a href="{% url 'parks:education-detail' slug=park.slug %}" class="nav-link">EDUCATIONAL CONTENT</a></li>
+              </ul>
+            </div>
+            <!-- end col-12 -->
+          </div>
+          <!-- end row -->
+        </div>
+        <!-- end container -->
+      </header>
+      <!-- end header -->
+
+      <section class="site-section side-content">
+          <div class="map-container">
+            <!-- Leaflet map must be styled in-line upon creation -->
+            <div class="map" style="height: 100%; width: 100%; margin-top: 0px; margin-bottom: 0px; float: center; background: none">
+              <style>
+                .leaflet-container {height: 100%}
+              </style>
+                {% leaflet_map "main" callback="map_init" %}
+            </div>
+          </div>
+
+          <!-- General Park Overview-->
+          <div class="content-container">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 wow fadeInLeft animated no-fluff">
+                  <div class="titles light large">
+                        <h2>{{ park.name }} </h2>
+                        <br>
+                  </div>
+                  <div class="titles light left">
+                    <h6>{{ park.desc }}</h6>
+                  </div>
+
+              <!-- end titles -->
+              </div>
+              <div class="col-md-5 col-sm-12 wow fadeInRight animated flex-center">
+                  <img src="{% static 'parks/images/park-image.jpg' %}" style="height: 400px">
+              </div>
+            </div>
+            <!-- end col-6 -->
+          </div>
+          <!-- end General Park Overview -->
+
+          <!--Visitor centers and associated map-->
+          <div class="content-container-with-margin">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 wow fadeInLeft animated top-fluff">
+                  <div class="titles light large" id="center-container">
+                        <h2>Visitor Centers</h2>
+                        <div class="pagination blocked" id="centers">
+                            {% if not centers %}
+                                <div class="content-boxes small flex-center top-fluff">
+                                    <div class="placeholder titles light">
+                                        <h6>There are no visitor centers to display at this moment.</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for center in centers %}
+                                <div class="content-boxes small">
+                                     <div class="flip-box">
+                                         <!-- Flip Box Front -->
+                                       <div class="inner">
+                                         <div class="flip-box-front">
+                                            <img src="{% static 'parks/images/pattern-center.jpg' %}" class="content-image left">
+                                             <div class="front-content right">
+                                                 <div class="full-width">
+                                                    <h4>{{ center.name }}</h4>
+
+                                                    <h5 class="clipped"> {{ center.desc }}</h5>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <!-- end flip-box-front -->
+                                         <!-- Flip Box Back -->
+                                         <div class="flip-box-back">
+                                            <div class="inner-content">
+                                                <p><b>{{ center.directions }}</b></p>
+                                            </div>
+                                         </div>
+                                         <!-- end flip-box-back -->
+                                       </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                                <br>
+                                <br>
+                                <div>
+                                <h3 class="step-links full-width">
+                                {% if centers.has_previous %}
+                                    <a class="link left" href="?centers_page={{ centers.previous_page_number }}">PREVIOUS</a>
+                                {% endif %}
+
+                                {% if centers.has_next %}
+                                    <a class="link right" href="?centers_page={{ centers.next_page_number }}">NEXT</a>
+                                {% endif %}
+                                </h3>
+                                </div>
+                                <div class="current full-width left">
+                                        <h3>PAGE {{ centers.number }} of {{ centers.paginator.num_pages }}</h3>
+                                </div>
+                                <script>
+                                    $('#center-container').on("click",".link",function(e){
+                                        e.preventDefault(); // cancel click
+                                        var page = $(this).attr('href');
+                                        $('#centers').load(page + " #centers");
+                                    });
+                                </script>
+                            {% endif %}
+                        </div>
+
+                  </div>
+
+              <!-- end titles -->
+              </div>
+              <div class="map" style="height: 600px; width: 41.667%; float: right; background: none">
+                <style>
+                .leaflet-container {height: 100%}
+                </style>
+                {% leaflet_map "visitorcenter" callback="map_init_centers" %}
+              </div>
+            <!-- end col-6 -->
+            </div>
+          </div>
+          <!--End visitor centers and associated map-->
+
+          <!--Campgrounds and associated map-->
+          <div class="content-container-with-margin2">
+            <div class="row">
+                <div class="map" style="height: 600px; width: 41.667%; float: left; background: none; margin-top: 160px; margin-left: 5%">
+                    <style>
+                        .leaflet-container {height: 100%}
+                    </style>
+                    {% leaflet_map "campgrounds" callback="map_init_campgrounds" %}
+                </div>
+              <div class="col-md-6 col-sm-6 wow fadeInRight animated top-fluff">
+                  <div class="titles light large" id="camp-container">
+                        <h2>Campgrounds</h2>
+                        <div class="pagination blocked" id="camps">
+                            {% if not campgrounds %}
+                                <div class="content-boxes small flex-center top-fluff">
+                                    <div class="placeholder titles light">
+                                        <h6>There are no campgrounds to display at this moment.</h6>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for camp in campgrounds %}
+                                <div class="content-boxes large">
+                                     <div class="flip-box">
+                                       <div class="inner">
+                                         <!-- Flip Box Front -->
+                                         <div class="flip-box-front">
+                                            <img src="{% static 'parks/images/pattern-camping.jpg' %}" class="content-image right">
+                                             <div class="front-content left">
+                                                 <div class="full-width">
+                                                    <h4 class="large">{{ camp.name }}</h4>
+
+                                                    <h5 class="large clipped">{{ camp.desc }}</h5>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <!-- end flip-box-front -->
+                                         <!-- Flip Box Back -->
+                                         <div class="flip-box-back">
+                                            <div class="inner-content">
+                                                {% if camp.reg_overview != "" %}
+                                                <p class="small"><b>Special Considerations:</b> {{ camp.reg_overview }}</p>
+                                                {% else %}
+                                                <p class="small"><b>Special Considerations:</b> None</p>
+                                                {% endif %}
+
+                                                <p class="small center-text">
+                                                  {% if camp.firewood %}
+                                                    <b>Firewood available:</b> Yes &nbsp
+                                                  {% else %}
+                                                    <b>Firewood available:</b> No &nbsp
+                                                  {% endif %}
+
+                                                  {% if camp.internet %}
+                                                    <b>Internet available:</b> Yes &nbsp
+                                                  {% else %}
+                                                    <b>Internet available:</b> No &nbsp
+                                                  {% endif %}
+
+                                                  {% if camp.food_storage %}
+                                                    <b>Food Storage available:</b> Yes &nbsp
+                                                  {% else %}
+                                                    <b>Food Storage available:</b> No &nbsp
+                                                  {% endif %}
+                                                </p>
+
+
+                                            </div>
+                                         </div>
+                                         <!-- end flip-box-back -->
+                                       </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                                <br>
+                                <br>
+                                <div>
+                                <h3 class="step-links full-width">
+                                {% if campgrounds.has_previous %}
+                                    <a class="link left" href="?camps_page={{ campgrounds.previous_page_number }}">PREVIOUS</a>
+                                {% endif %}
+
+                                {% if campgrounds.has_next %}
+                                    <a class="link right" href="?camps_page={{ campgrounds.next_page_number }}">NEXT</a>
+                                {% endif %}
+                                </h3>
+                                </div>
+                                <div class="current full-width left">
+                                        <h3>PAGE {{ campgrounds.number }} of {{ campgrounds.paginator.num_pages }}</h3>
+                                </div>
+                                <script>
+                                    $('#camp-container').on("click",".link",function(e){
+                                        e.preventDefault(); // cancel click
+                                        var page = $(this).attr('href');
+                                        $('#camps').load(page + " #camps");
+                                    });
+                                </script>
+                            {% endif %}
+                        </div>
+
+                  </div>
+              </div>
+            </div>
+          </div>
+      <!-- end container -->
+      </section>
+    </main>
+</body>
+
+<script type="text/javascript">
+
+    function map_init(map, options) {
+        // get point lat and lon
+        var lon = "{{ park.geometry.x }}";
+        var lat = "{{ park.geometry.y }}";
+
+        // zoom to point & add it to map
+        map.setView([lat, lon], 6);
+        L.marker([lat, lon]).addTo(map);
+
+        map.options.minZoom = 2;
+    }
+
+    function map_init_centers(map, options) {
+        {% for center in centers_all %}
+        var lon = "{{ center.geometry.x }}";
+        var lat = "{{ center.geometry.y }}";
+
+        L.marker([lat, lon]).addTo(map);
+        {% endfor %}
+
+        var lon_park = "{{ park.geometry.x }}";
+        var lat_park = "{{ park.geometry.y }}";
+        map.setView([lat_park, lon_park], 10);
+        L.marker([lat_park, lon_park]).addTo(map);
+
+    }
+
+    function map_init_campgrounds(map, options) {
+        {% for camp in campgrounds_all %}
+        var lon = "{{ camp.geometry.x }}";
+        var lat = "{{ camp.geometry.y }}";
+
+        L.marker([lat, lon]).addTo(map);
+        {% endfor %}
+
+        var lon_park = "{{ park.geometry.x }}";
+        var lat_park = "{{ park.geometry.y }}";
+        map.setView([lat_park, lon_park], 9);
+        L.marker([lat_park, lon_park]).addTo(map);
+
+    }
+</script>

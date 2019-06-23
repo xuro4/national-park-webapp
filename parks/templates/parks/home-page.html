@@ -1,0 +1,214 @@
+{% load leaflet_tags %}
+{% leaflet_css %}
+{% leaflet_js %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}parks/css/style.css">
+    <script src="{% static 'parks/js/jsjquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'parks/js/bootstrap.min.js' %}"></script>
+</head>
+
+<body>
+    <main>
+      <header class="header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <!-- Logo -->
+              <div class="logo"><a href="{% url 'parks:home' %}"><img src="{{ STATIC_URL }}parks/images/npslogo.png" alt="Image"></a>
+                  <a href="" class="nav-link"><h2>NATIONAL PARKS</h2></a>
+              </div>
+
+              <!-- Navigation Options -->
+              <ul class="site-nav right">
+                <li class="nav-item"><a href="https://www.facebook.com/nationalparkservice" class="nav-link">FACEBOOK PAGE</a> </li>
+                <li class="nav-item"><a href="https://www.youtube.com/nationalparkservice" class="nav-link">YOUTUBE CHANNEL</a> </li>
+                <li class="nav-item"><a href="https://twitter.com/natlparkservice" class="nav-link">TWITTER FEED</a> </li>
+              </ul>
+            </div>
+            <!-- end col-12 -->
+          </div>
+          <!-- end row -->
+        </div>
+        <!-- end container -->
+      </header>
+      <!-- end header -->
+      <section class="slider">
+        <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">
+                <div class="search-box">
+                        <div class="inner">
+                            <form action="{% url 'parks:search-results' %}" method="get" accept-charset="utf-8">
+                                <input type="text" placeholder="Find a National Park" name="q">
+                                <select name="state" class="state" id="slow-scroll" onmousedown="if(this.options.length>8){this.size=2;}"  onchange='this.size=0;' onblur="this.size=0;">
+                                    <option selected="selected" hidden value="">STATE</option>
+                                    <option value="">ALL</option>
+                                    <option value="AL">AL</option>
+                                    <option value="AK">AK</option>
+                                    <option value="AZ">AZ</option>
+                                    <option value="AR">AR</option>
+                                    <option value="CA">CA</option>
+                                    <option value="CO">CO</option>
+                                    <option value="CT">CT</option>
+                                    <option value="DE">DE</option>
+                                    <option value="FL">GA</option>
+                                    <option value="HI">HI</option>
+                                    <option value="ID">ID</option>
+                                    <option value="IL">IL</option>
+                                    <option value="IN">IN</option>
+                                    <option value="IA">IA</option>
+                                    <option value="KS">KS</option>
+                                    <option value="KY">KY</option>
+                                    <option value="LA">LA</option>
+                                    <option value="ME">ME</option>
+                                    <option value="MD">MD</option>
+                                    <option value="MA">MA</option>
+                                    <option value="MI">MI</option>
+                                    <option value="MN">MN</option>
+                                    <option value="MS">MS</option>
+                                    <option value="MO">MO</option>
+                                    <option value="MT">MT</option>
+                                    <option value="NE">NE</option>
+                                    <option value="NV">NV</option>
+                                    <option value="NH">NH</option>
+                                    <option value="NJ">NJ</option>
+                                    <option value="NM">NM</option>
+                                    <option value="NY">NY</option>
+                                    <option value="NC">NC</option>
+                                    <option value="ND">ND</option>
+                                    <option value="OH">OH</option>
+                                    <option value="OK">OK</option>
+                                    <option value="OR">OR</option>
+                                    <option value="PA">PA</option>
+                                    <option value="RI">RI</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SD">SD</option>
+                                    <option value="TN">TN</option>
+                                    <option value="TX">TX</option>
+                                    <option value="UT">UT</option>
+                                    <option value="VT">VT</option>
+                                    <option value="VA">VA</option>
+                                    <option value="WA">WA</option>
+                                    <option value="WV">WV</option>
+                                    <option value="WI">WI</option>
+                                    <option value="WY">WY</option></select>
+                                <select name="type" class="type" id="#slow-scroll2" onmousedown="if(this.options.length>2){this.size=2;}"  onchange='this.size=0;' onblur="this.size=0;">
+                                    <option selected="selected" hidden value="">TYPE</option>
+                                    <option class="small" value="">ANY</option>
+                                    <option class="small" value="PARK">PARK</option>
+                                    <option class="small" value="SITE">SITE</option>
+                                    <option class="small" value="TRAIL">TRAIL</option>
+                                    <option class="small" value="RIVER">RIVER</option>
+                                    <option class="small" value="OTHER">OTHER</option></select>
+                                <input type="hidden" name="page" value="1">
+                                <button type="submit">SEARCH</button>
+                                <script>
+                                    var lastScroll = 0;
+                                    $('#slow-scroll').scroll(function(e){
+                                        var el = $(this),
+                                        scroll = el.scrollTop(),
+                                        round = lastScroll < scroll ? Math.ceil : Math.floor;
+                                        lastScroll = round(scroll/16) * 16;
+                                        el.scrollTop(lastScroll);
+                                    });
+                                </script>
+                                <script>
+                                    var lastScroll = 0;
+                                    $('#slow-scroll2').scroll(function(e){
+                                        var el = $(this),
+                                        scroll = el.scrollTop(),
+                                        round = lastScroll < scroll ? Math.ceil : Math.floor;
+                                        lastScroll = round(scroll/16) * 16;
+                                        el.scrollTop(lastScroll);
+                                    });
+                                </script>
+                            </form>
+                        </div>
+                </div>
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                      <div class="carousel-item active">
+                          <img class="full-screen" src="{% static 'parks/images/home-1.jpg' %}" alt="First slide">
+                          <div class="carousel-caption first">
+                              <div class="row">
+                                  <div class="slogan">
+                                      <div class="transform titles light large no-margin full-width">
+                                        <h2 class="large white">Welcome to</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="carousel-caption fourth">
+                              <div class="row">
+                                  <div class="tag">
+                                      <div class="transform titles light large no-margin full-width">
+                                        <h2 class="large white">National Park Services</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="carousel-item">
+                          <img class="full-screen" src="{% static 'parks/images/home-2.jpg' %}" alt="First slide">
+                          <div class="carousel-caption first lead">
+                              <div class="row">
+                                  <div class="slogan">
+                                      <div class="transform titles light large no-margin full-width">
+                                        <h2 class="large white">Explore Over</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="carousel-caption fourth">
+                              <div class="row">
+                                  <div class="tag">
+                                      <div class="transform titles light large no-margin full-width">
+                                        <h2 class="large white">{{ count }} Park Locations</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="carousel-item">
+                          <img class="full-screen" src="{% static 'parks/images/home-3.jpg' %}" alt="First slide">
+                          <div class="carousel-caption first lead">
+                              <div class="row">
+                                  <div class="slogan">
+                                      <div class="transform titles light large no-margin full-width">
+                                        <h2 class="large white">Get Started</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="carousel-caption fourth">
+                              <div class="row">
+                                  <div class="tag">
+                                      <div class="transform titles light large no-margin full-width">
+                                        <h2 class="large white">By Finding a Park</h2>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                </div>
+                <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+      </section>
+    </main>
+</body>

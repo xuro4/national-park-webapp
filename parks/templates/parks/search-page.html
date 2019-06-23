@@ -1,0 +1,131 @@
+{% load leaflet_tags %}
+{% leaflet_css %}
+{% leaflet_js %}
+{% load static %}
+{% load url_handler %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}parks/css/style.css">
+    <script src="{% static 'parks/js/jsjquery-3.4.1.min.js' %}"></script>
+</head>
+
+<body>
+    <main>
+      <header class="header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <!-- Logo -->
+              <div class="logo"><a href="{% url 'parks:home' %}"><img src="{{ STATIC_URL }}parks/images/npslogo.png" alt="Image"></a>
+                  <a href="{% url 'parks:home' %}" class="nav-link"><h2>NATIONAL PARKS</h2></a>
+              </div>
+
+              <!-- Navigation Options -->
+              <ul class="site-nav right">
+                <li class="nav-item"><a href="https://www.facebook.com/nationalparkservice" class="nav-link">FACEBOOK PAGE</a> </li>
+                <li class="nav-item"><a href="https://www.youtube.com/nationalparkservice" class="nav-link">YOUTUBE CHANNEL</a> </li>
+                <li class="nav-item"><a href="https://twitter.com/natlparkservice" class="nav-link">TWITTER FEED</a> </li>
+              </ul>
+            </div>
+            <!-- end col-12 -->
+          </div>
+        </div>
+      </header>
+      <!-- end header -->
+
+      <section class="site-section side-content">
+          <div class="map-container small">
+            <!-- Leaflet map must be styled in-line upon creation -->
+            <div class="map" style="height: 100%; width: 100%; margin-top: 0px; margin-bottom: 0px; float: center; background: none">
+              <style>
+                .leaflet-container {height: 100%}
+              </style>
+                {% leaflet_map "main" callback="map_init" %}
+            </div>
+          </div>
+
+          <!-- General Park Overview-->
+          <div class="content-container table" id="search-results">
+            <div class="full-width">
+                <div class="titles light large">
+                    <h2 class="large extra">Search Results</h2>
+                </div>
+              {% for object in object_list %}
+                <div class="titles light large">
+                    <a href="{% url 'parks:news-detail' slug=object.slug %}"><h6>{{ object.name }} <br> </h6></a>
+                    <h4 class="extended"> {{ object.desc }}<br> <br> <br> </h4>
+                </div>
+              {% endfor %}
+              {% if not object_list %}
+                <div class="titles light large">
+                    <h6>Sorry, there are no results matching that query. Please try again with new terms.</h6>
+                </div>
+              {% endif %}
+            </div>
+            <div class="full-width">
+              {% if is_paginated %}
+                <div class="titles light large">
+                  <h6 class="step-links full-width">
+                    <br>
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li><a href="?{% url_add 'page' -1 %}">PREV</a></li>
+                        {% else %}
+                            <li class="disabled"><span>PREV</span></li>
+                        {% endif %}
+
+                        {% if page_obj.number|add:'-3' > 1 %}
+                            <li><a href="?{% url_add 'page' -5 %}">&hellip;</a></li>
+                        {% endif %}
+
+                        {% for i in page_obj.paginator.page_range %}
+                            {% if page_obj.number == i %}
+                                <li class="active"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
+                            {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %}
+                                <li><a href="?{% url_replace 'page' i  %}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.paginator.num_pages > page_obj.number|add:'3' %}
+                            <li><a href="?{% url_add 'page' 5 %}">&hellip;</a></li>
+                        {% endif %}
+
+                        {% if page_obj.has_next %}
+                            <li><a href="?{% url_add 'page' 1 %}">NEXT</a></li>
+                        {% else %}
+                            <li class="disabled"><span>NEXT</i></span></li>
+                        {% endif %}
+                    </ul>
+                  </h6>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          <!-- end search results -->
+      </section>
+    </main>
+</body>
+
+<script type="text/javascript">
+
+    function map_init(map, options) {
+        // get point lat and lon
+        {% for park in object_list %}
+            var lon = "{{ park.geometry.x }}";
+            var lat = "{{ park.geometry.y }}";
+
+            // zoom to point & add it to map
+            L.marker([lat, lon]).addTo(map);
+
+        {% endfor %}
+
+        map.setView([40, -100], 5);
+        map.options.minZoom = 2;
+
+    }
+
+</script>
