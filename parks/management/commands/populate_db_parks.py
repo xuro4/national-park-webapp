@@ -8,18 +8,24 @@ import logging
 
 
 class Command(BaseCommand):
+    # Update using Cron Job
     help = 'Populates database with National Park information'
 
     def pull_park_data(self, start_index):
+        # API Settings
         endpoint = 'https://developer.nps.gov/api/v1/parks'
         api_key = str(settings.API_KEY)
         params = {'api_key': api_key,
                   'parkCode': '',
                   'limit': 100,
                   'start': start_index}
+        # Pull from API
         response = requests.get(endpoint, params=params).json()
         for entry in response['data']:
+            # Populate Database from API entries
             name_special_charas = entry['name']
+            
+            # Replace specific characters that won't display properly with rough equivalents
             name_stripped_first_pass = name_special_charas.replace('&#333;', 'o')
             name_stripped_second_pass = name_stripped_first_pass.replace('&#241;', 'n')
             name = name_stripped_second_pass.replace('&#257;', 'a')
@@ -29,7 +35,8 @@ class Command(BaseCommand):
             slug = slugify(park_code_str)
             desc = entry["description"]
             designation = entry['designtaion']
-
+            
+            # Parse through latLong return to remove unnecessary characters
             if entry['latLong'] != '':
                 lat_shard, comma, long_shard = entry['latLong'].partition(', ')
                 lat_str = lat_shard.replace('lat:', '')
@@ -40,7 +47,8 @@ class Command(BaseCommand):
                 point = Point(long, lat)
             else:
                 point = None
-
+            
+            # If park doesn't already exist, add it to the database
             if not Park.objects.filter(name=name, states=states, slug=slug, geometry=point).exists():
                 new_park = Park(name=name, states=states, slug=slug, geometry=point, desc=desc, designation=designation)
                 new_park.save()
