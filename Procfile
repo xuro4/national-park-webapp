@@ -1,0 +1,1 @@
+web: gunicorn nationalparkwebapp.wsgi --log-file -
