@@ -8,16 +8,18 @@ import logging
 
 
 class Command(BaseCommand):
+    # Updated through Cron Job
     help = 'Populates database with campground information for each park'
 
     def pull_campground_data(self):
         for park in Park.objects.all():
+            # API Settings
             endpoint = 'https://developer.nps.gov/api/v1/campgrounds'
             api_key = str(settings.API_KEY)
             params = {'api_key': api_key,
                       'parkCode': park.slug,
                       'limit': 100}
-
+            # Pull from API
             response = requests.get(endpoint, params=params).json()
             for entry in response['data']:
                 # fill in background info
@@ -71,7 +73,7 @@ class Command(BaseCommand):
                 else:
                     cellphone = False
 
-                # Parse through data for geographical information
+                # Parse through data for geographical information, filtering out commas and other unnecessary characters
                 if entry['latLong'] != '':
                     lat_shard, comma, long_shard = entry['latLong'].partition(', ')
                     lat_str = lat_shard.replace('{lat:', '')
@@ -83,7 +85,8 @@ class Command(BaseCommand):
                     point = Point(long, lat)
                 else:
                     point = None
-
+                
+                # If campground doesn't exist, add it to the database
                 if not Campgrounds.objects.filter(name=name, park=park, geometry=point, desc=desc).exists():
                     new_campground = Campgrounds(name=name, park=park, reserve_url=reserve_url, desc=desc, weather=weather,
                                                  reg_overview=reg_overview, campsites=campsites,
