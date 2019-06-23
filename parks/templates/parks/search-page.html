@@ -48,12 +48,13 @@
             </div>
           </div>
 
-          <!-- General Park Overview-->
+          <!-- Search Results -->
           <div class="content-container table" id="search-results">
             <div class="full-width">
                 <div class="titles light large">
                     <h2 class="large extra">Search Results</h2>
                 </div>
+              <!-- For each returned result -->  
               {% for object in object_list %}
                 <div class="titles light large">
                     <a href="{% url 'parks:news-detail' slug=object.slug %}"><h6>{{ object.name }} <br> </h6></a>
@@ -69,6 +70,7 @@
             <div class="full-width">
               {% if is_paginated %}
                 <div class="titles light large">
+                  <!-- Page Navigation -->  
                   <h6 class="step-links full-width">
                     <br>
                     <ul class="pagination">
@@ -77,11 +79,13 @@
                         {% else %}
                             <li class="disabled"><span>PREV</span></li>
                         {% endif %}
-
+                        
+                        
                         {% if page_obj.number|add:'-3' > 1 %}
                             <li><a href="?{% url_add 'page' -5 %}">&hellip;</a></li>
                         {% endif %}
-
+                        
+                        <!-- Display Page Numbers With Links Ahead and Behind Current Page -->
                         {% for i in page_obj.paginator.page_range %}
                             {% if page_obj.number == i %}
                                 <li class="active"><span>{{ i }}<span class="sr-only">(current)</span></span></li>
@@ -89,6 +93,7 @@
                                 <li><a href="?{% url_replace 'page' i  %}">{{ i }}</a></li>
                             {% endif %}
                         {% endfor %}
+                        <!-- End Display Page Numbers -->
 
                         {% if page_obj.paginator.num_pages > page_obj.number|add:'3' %}
                             <li><a href="?{% url_add 'page' 5 %}">&hellip;</a></li>
@@ -101,6 +106,7 @@
                         {% endif %}
                     </ul>
                   </h6>
+                  <!-- end Page Navigation -->  
                 </div>
               {% endif %}
             </div>
